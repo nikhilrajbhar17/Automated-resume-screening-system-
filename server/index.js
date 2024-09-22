@@ -8,19 +8,30 @@ const scoreRoute = require("./routes/scoreRoute");
 const resumeRoutes = require("./routes/resume");
 const { consumeResumeData } = require("./kafka/consumer");
 const jwt = require("jsonwebtoken");
-require('dotenv').config();
-
+require("dotenv").config();
 
 const app = express();
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+const allowedOrigins = [
+  "http://localhost:3000", // for local development
+  "https://automated-resume-screening-system.vercel.app/", // replace with your Vercel frontend URL
+];
+
 app.use(
   cors({
-    origin: "http://localhost:3000", // Allow your React frontend to make requests
-    credentials: true,
-    allowedHeaders: ["Authorization", "Content-Type"],
+    origin: function (origin, callback) {
+      if (allowedOrigins.includes(origin) || !origin) {
+        // !origin allows non-web requests (e.g., Postman)
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true, // Allows credentials (like cookies) to be sent
+    allowedHeaders: ["Authorization", "Content-Type"], // Allow the specified headers
   })
 );
 

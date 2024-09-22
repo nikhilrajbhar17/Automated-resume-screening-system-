@@ -20,8 +20,23 @@ const consumeResumeData = async () => {
         "JavaScript",
         "Node.js",
         "Kafka",
+        "React.js",
+        "java",
+        "Spring Boot",
+        "Docker",
+        "Kubernetes",
+        "MySQL",
+        "PostgreSQL",
+        "MongoDB",
+        "Redis",
+        "ElasticSearch",
+        "AWS",
+        "GCP",
       ]);
       console.log(`Resume Score: ${score} and id: ${userId}`);
+      if (score > 100) {
+        score = 100;
+      }
       const user = await User.findById(userId); // Assuming you have User model imported
       if (user) {
         user.resumeScore = score;
